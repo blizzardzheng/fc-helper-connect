@@ -13,12 +13,14 @@ export async function runScriptBatch(commands, options?: object) {
   return result;
 }
 
-export default function connect(config) {
-  if (config.$env !== false) { 
-    require('dotenv').config(config.$env || {});
+export default function connect(config, option) {
+  const env = config.$env || option.env;
+  const init = config.$init || option.init;
+  if (env !== false) { 
+    require('dotenv').config(env || {});
   }
-  if (config.$init) {
-    config.$init(process.env);
+  if (init) {
+    init(process.env);
   }
   return function(origin) {
     Object.keys(config)
