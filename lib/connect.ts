@@ -26,15 +26,21 @@ export default function connect(config, option) {
     Object.keys(config)
     .filter(key => !key.startsWith('$'))
     .forEach(key => {
-      origin[key] = async function(event, _, callback) {
+      origin[key] = async function(event, ctx, callback) {
         const eventStr = event.toString();
         let queries = eventStr;
         try {
           queries = JSON.parse(eventStr);
-        } catch(e) {}
-        const res = await config[key](queries, config, callback);
-        if (res) {
-          callback(null, res);
+        } catch(e) {
+          callback('Event String is not valid JSON');
+        }
+        try {
+          const res = await config[key](queries, Object.assign({}, ctx, config), callback);
+          if (res) {
+            callback(null, res);
+          }
+        } catch(e) {
+          callback(e);
         }
       }
     })
