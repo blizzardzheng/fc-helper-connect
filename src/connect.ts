@@ -1,5 +1,7 @@
 const runscript = require('runscript');
-export async function runScriptBatch(commands, options?: object) {
+
+
+export async function runScriptBatch(commands:any, options?: object) {
   const result = {};
   for (let command of commands) {
     command = command.name ? command : { name: command, exec: command };
@@ -13,7 +15,34 @@ export async function runScriptBatch(commands, options?: object) {
   return result;
 }
 
-export default function connect(config, option) {
+
+export function bind(func, config:any) {
+  return async function(event, ctx, callback) {
+    const eventStr = event.toString();
+    let queries = eventStr;
+    try {
+      queries = JSON.parse(eventStr);
+    } catch(e) {
+      callback('Event String is not valid JSON');
+    }
+    try {
+      const res = await func(queries, Object.assign({}, ctx, config), callback);
+      if (res) {
+        callback(null, res);
+      }
+    } catch(e) {
+      callback(e);
+    }
+  }
+}
+
+
+export interface IConnectOption {
+  $env?: string;
+  $init?: string;
+  [key:string]: any;
+}
+export default function connect(config: IConnectOption, option:any) {
   const env = config.$env || option.env;
   const init = config.$init || option.init;
   if (env !== false) { 

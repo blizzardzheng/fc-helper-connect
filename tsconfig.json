@@ -1,6 +1,8 @@
 {
   "compileOnSave": true,
+  "include": ["src"],
   "compilerOptions": {
+    "outDir": "./lib",
     "target": "es2017",
     "module": "commonjs",
     "noImplicitAny": false,
@@ -19,6 +21,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "inlineSourceMap": true,
+    "declaration": true,
     "importHelpers": true,
     "types": ["node"]
   },
