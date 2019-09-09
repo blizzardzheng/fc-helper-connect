@@ -45,6 +45,7 @@ export interface IConnectOption {
 export default function connect(config: IConnectOption, option:any) {
   const env = config.$env || option.env;
   const init = config.$init || option.init;
+  const initializer = config.$initializer || option.initializer;
   if (env !== false) { 
     require('dotenv').config(env || {});
   }
@@ -72,6 +73,11 @@ export default function connect(config: IConnectOption, option:any) {
           callback(e);
         }
       }
-    })
+    });
+    if (initializer) {
+      origin.initializer = function(context, callback) {
+          callback(null, initializer(context, process.env));
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "fc-helper-connect",
-  "version": "1.1.0",
+  "version": "1.1.2-alpha.1",
   "description": "connector for fc",
   "main": "lib/connect.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "tsc -p ./",
     "prepublish": "npm run build"
   },
-  "types": "./lib",
+  "types": "lib/connect.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/blizzardzheng/fc-helper-connect.git"
